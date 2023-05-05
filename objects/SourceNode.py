@@ -1,5 +1,5 @@
 from .Node import Node
-from .SourceTypeEnum import SOURCE_TYPE
+from .NodeTypeEnum import NodeType
 
 
 class SourceNode(Node):

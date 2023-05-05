@@ -4,3 +4,5 @@ class Node():
         self.x = x
         self.y = y
         self.edges = edges
+        self.type = None
+        self.substation_id = -1
