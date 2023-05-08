@@ -9,6 +9,7 @@ import math
 
 def prims(graph):
     # pick arbitrary first vertex to start MST from
+
     vertices_connected = set([graph.nodes[0].id])
     edges = []
     metadata = []
@@ -31,7 +32,7 @@ def prims(graph):
         edges.append(shortest_connection[0])
         total_wiring += shortest_connection[1]
 
-    return edges, vertices_connected, [total_wiring]
+    return edges, list(vertices_connected), [total_wiring]
 
 
 def multi_source_prims(graph):
@@ -257,3 +258,59 @@ def distance_between_substations(graph, idx_of_largest_substation):
 
 def dist_between_substation_and_vertex(graph, idx_of_largest_substation, vertex):
     return math.dist([graph.nodes[idx_of_largest_substation].x, graph.nodes[idx_of_largest_substation].y], [vertex.x, vertex.y])
+
+
+
+
+
+def multi_source_prims_v2_change(graph, idx_of_largest_substation, change=0.05):
+    vertices_connected_set = []
+    metadata = []
+    total_wiring = 0
+
+    # initialize a set for each of the substations
+    for node in graph.nodes:
+        if node.type == NodeType.SUBSTATION:
+            vertices_connected_set.append([node.id])
+    edges = []
+    # since the substations don't need to be connected to each other,
+    # count each of them in the covered set already
+    num_connected_nodes = len(vertices_connected_set)
+
+
+    distances = distance_between_substations(graph, idx_of_largest_substation)
+    mult = 1 + change * (max(7 - distances[0], 0)) + change * (max(7 - distances[1], 0))
+
+    while num_connected_nodes != len(graph.nodes):
+        flat_set = [element for sublist in vertices_connected_set for element in sublist]
+        shortest_connection = (None, float('inf'), None)
+        for j, source_set in enumerate(vertices_connected_set):
+            multiplier = 1
+            # if this is the source set for the largest substation, set its multiplier to something greater than 1
+            # v2 is based on the distance between substations
+            if j == idx_of_largest_substation:
+                multiplier = mult
+
+            for id in source_set:
+                for edge in graph.nodes[id].edges:
+                    # check that connection is not between nodes already in the MST
+                    if edge.node1.id not in flat_set or edge.node2.id not in flat_set:
+                        if edge.weight * multiplier < shortest_connection[1]:
+                            shortest_connection = (edge, edge.weight, j)
+
+        if shortest_connection[0].node1.id not in flat_set:
+            vertices_connected_set[shortest_connection[2]].append(shortest_connection[0].node1.id)
+            shortest_connection[0].node1.substation_id = shortest_connection[2]
+        else:
+            vertices_connected_set[shortest_connection[2]].append(shortest_connection[0].node2.id)
+            shortest_connection[0].node2.substation_id = shortest_connection[2]
+
+        edges.append(shortest_connection[0])
+        total_wiring += shortest_connection[1]
+        num_connected_nodes +=1
+
+    sink_distribution = [len(sinks) for sinks in vertices_connected_set]
+    metadata.append(total_wiring)
+    metadata.append(sink_distribution)
+
+    return edges, vertices_connected_set, metadata

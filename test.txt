@@ -1,0 +1,13 @@
+Mean and variance in wire length change for v0:  0.003285792762186962 1.528702433407351e-05 (0.02)
+Mean and variance in wire length change for v1:  0.008989515242666654 9.816186224643217e-05 (0.05)
+Mean and variance in wire length change for v2:  0.017601241620414692 0.0004743884726860596 (0.1)
+Mean and variance of change in sink distribution in largest substation for v0:  -0.17624989271392574 0.09084728396139147
+Mean and variance of change in sink distribution in largest substation for v1:  -0.37933898182150516 0.13464762274856698
+Mean and variance of change in sink distribution in largest substation for v2:  -0.4924134159177262 0.14541883829488877
+
+
+
+Mean and variance in wire length change for v1:  0.02335153007545692 0.0006272015508823769 (0.3)
+Mean and variance in wire length change for v2:  0.02181074232332083 0.0006870680090910477 (0.5)
+Mean and variance of change in sink distribution in largest substation for v1:  -0.761606667100085 0.08973851169909741
+Mean and variance of change in sink distribution in largest substation for v2:  -0.8169569131944882 0.08030664936718321
